@@ -12,6 +12,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
 
 from time import sleep
 import datetime
@@ -73,17 +74,15 @@ def check_availability(driver):
         #assert "No room matched your search criteria" in driver.page_source
         driver.find_element(By.XPATH, "//*[@id='errMsg']")
     except NoSuchElementException:
-        print("Nothing!")
-        return False
+        print("Match!")
+        interrupt = ""
+        while interrupt != "Y":
+            print("Done: ")
+            interrupt = input()
+        return True
 
-    print("Match!")
-    print("Done: ")
-    interrupt = ""
-    while interrupt != "Y":
-        print("Done: ")
-        interrupt = input()
-    return True
-        
+    print("Nothing!")
+    return False
     
 def find_open_rooms():
     print("Checking availability at:", datetime.datetime.now())
