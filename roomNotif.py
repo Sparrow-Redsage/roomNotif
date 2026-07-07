@@ -17,6 +17,7 @@ from selenium.common.exceptions import NoSuchElementException
 from time import sleep
 import datetime
 import schedule
+import os
 
 
 def navigate_home_page(driver):
@@ -72,7 +73,9 @@ def navigate_booking_page(driver):
 def check_availability(driver):
     try:
         #assert "No room matched your search criteria" in driver.page_source
-        driver.find_element(By.XPATH, "//*[@id='errMsg']")
+        #wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "#errMsg")))
+        wait = WebDriverWait(driver, 20)
+        element = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "#errMsg")))
     except NoSuchElementException:
         print("Match!")
         interrupt = ""
@@ -86,6 +89,7 @@ def check_availability(driver):
     
 def find_open_rooms():
     print("Checking availability at:", datetime.datetime.now())
+    os.environ['MOZ_HEADLESS'] = '1'
     driver = webdriver.Firefox()
     navigate_home_page(driver)
     navigate_booking_page(driver)
